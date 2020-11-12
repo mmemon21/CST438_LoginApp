@@ -1,13 +1,25 @@
+#Got a new script! Snagged this bad boy from
+#https://github.com/pestrada/android-tdd-playground/blob/master/.travis.yml
 language: android
-dist: trusty
+jdk: oraclejdk8
+sudo: false
+
 android:
-  components:
+ components:
+   - platform-tools
+   - tools
+   - build-tools-29.0.2
+   - android-22
+   - android-29
+   - android-24
+   - sys-img-armeabi-v7a-android-22
+   - sys-img-
+   - extra-android-m2repository
 
-    - build-tools-26.0.2
-
-    - android-26
-
-
-    - extra-google-google_play_services
-    - extra-google-m2repository
-    - extra-android-m2repository
+before_script:
+ # Create and start emulator
+ - echo no | android create avd --force -n test -t android-22 --abi armeabi-v7a
+ - emulator -avd test -no-skin -no-audio -no-window &
+ - android-wait-for-emulator
+ - adb shell input keyevent 82 &
+script: ./gradlew connectedAndroidTest
